@@ -1,23 +1,21 @@
 <script lang="ts" setup>
-import { defineProps, defineEmits } from 'vue'
-
-defineProps<{
-  formData: Record<string, any> | null
-}>()
+import { defineEmits } from 'vue'
+// @ts-ignore
+import { useFormStore } from '@/store/formStore'
 
 const emit = defineEmits(['close'])
-
+const formStore = useFormStore()
 const onClose = () => {
   emit('close')
 }
 </script>
 
 <template>
-  <div v-if="formData" class="bg-white p-4 shadow-lg h-fit min-w-96">
+  <div v-if="formStore.formData" class="bg-white p-4 shadow-lg h-fit min-w-96">
     <h2 class="text-center text-lg font-semibold">Preview</h2>
     <hr class="my-3" />
     <div class="">
-      <div v-for="(value, key) in formData.value" :key="key" class="mb-2 text-center">
+      <div v-for="(value, key) in formStore.formData" :key="key" class="mb-2 text-center">
         <strong class="block">{{ key }}</strong>
         <p>{{ value }}</p>
       </div>

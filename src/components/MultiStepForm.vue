@@ -1,14 +1,16 @@
 <script lang="ts" setup>
 import type { FormType } from '@/types/formType'
-import { ref, watch } from 'vue'
+import { ref } from 'vue'
 import DynamicFields from './DynamicFields.vue'
+// @ts-ignore
+import { useFormStore } from '@/store/formStore'
 import Card from './Card.vue'
 
 const props = defineProps<{
   formStructure: FormType
 }>()
 
-const formData = ref<Record<string, any>>({})
+const formStore = useFormStore()
 const curStep = ref<number>(1)
 const showCard = ref<boolean>(false)
 const isStepValid = ref<boolean>(false)
@@ -95,8 +97,8 @@ const handleStepButton = (step: number) => {
         <DynamicFields
           :key="curStep"
           :fields="props.formStructure[curStep - 1].fields"
-          :value="formData.value"
-          @update:value="(newData: string) => (formData.value = newData)"
+          :value="formStore.formData"
+          @update:value="(newData: string) => formStore.updateFormData(newData)"
           @validation="validationHandler"
         />
 
@@ -129,6 +131,6 @@ const handleStepButton = (step: number) => {
         </div>
       </form>
     </div>
-    <Card v-if="showCard" :formData="formData" @close="showCard = false" />
+    <Card v-if="showCard" @close="showCard = false" />
   </div>
 </template>
